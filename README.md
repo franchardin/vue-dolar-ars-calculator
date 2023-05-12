@@ -1,4 +1,4 @@
-# calculadora
+# calculadora de cambio
 
 ## Project setup
 ```
