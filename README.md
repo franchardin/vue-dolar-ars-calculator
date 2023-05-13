@@ -1,5 +1,5 @@
 # calculadora
-
+Deploy: https://www.starlit-bubblegum-9a2cb7.netlify.app/
 ## Project setup
 ```
 npm install
