@@ -102,7 +102,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 1em 1.25em;
+  padding: 1em;
   height: 60vh;
   width: 80vw;
   th, tr, td {
