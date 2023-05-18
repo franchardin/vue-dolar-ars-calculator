@@ -1,0 +1,12 @@
+{
+  "es": {
+    "amount": "monto",
+    "currency": "moneda",
+    "ars_name": "Peso Argentino",
+    "ars_name_plural": "Pesos Argentinos",
+    "dolar_values": "Valores Dolar",
+    "change_type": "Tipo",
+    "change_buy": "Compra",
+    "change_sale": "Venta"
+  }
+}

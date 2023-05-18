@@ -1,7 +1,7 @@
 <template>
   <main class="calculator">
     <section class="firstContainer">
-      <h2>monto</h2>
+      <h2>{{ $t.es.amount }}</h2>
       <input
         type="number"
         id="input-field"
@@ -10,12 +10,12 @@
         placeholder="0.00"
         autofocus
       />
-      <h2>moneda</h2>
+      <h2>{{ $t.es.currency }}</h2>
       <select 
         v-model="selectedCurrency"
         id="select-field"
       >
-        <option value="0">Peso Argentino</option>
+        <option value="0">{{ $t.es.ars_name }}</option>
         <option v-for="(item, i) in data" :key="item.casa.nombre" :value="i+1">
           {{ item.casa.nombre }}
         </option>
@@ -27,16 +27,16 @@
         </div>
       </div>
       <div v-else>
-        <h3>Pesos Argentinos: </h3>
+        <h3>{{ $t.es.ars_name_plural }}: </h3>
         <span class="green small">${{ input !== "" && input !== 0 ? this.calculateChange(selectedCurrency) : '0' }}</span>
       </div>
     </section>
     <section class="secondContainer">
-      <h2>Valores Dolar</h2>
+      <h2>{{ $t.es.dolar_values }}</h2>
       <table v-if="data">
-        <th>Tipo</th>
-        <th>Compra</th>
-        <th>Venta</th>
+        <th>{{ $t.es.change_type }}</th>
+        <th>{{ $t.es.change_buy }}</th>
+        <th>{{ $t.es.change_sale }}</th>
         <tr v-for="item in data" :key="item.casa.nombre">
           <td>{{ item.casa.nombre.substr(6, item.casa.nombre.length) }}</td>
           <td class="bigCurrencyNumber light">${{ item.casa.compra }}</td>
@@ -52,6 +52,7 @@
 
 <script>
 import { getDolarValues } from '../services/apiCall.js'
+import $t from '../assets/text/text.json'
 
 export default {
   name: 'TheCalculator',
@@ -61,6 +62,7 @@ export default {
       data: null,
       error: null,
       selectedCurrency: '0',
+      $t: $t
     }
   },
   methods: {
@@ -97,7 +99,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 1em 0 2em;
+  padding: 1em 0;
   height: 60vh;
   width: 80vw;
   th, tr, td {
