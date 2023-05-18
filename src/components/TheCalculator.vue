@@ -53,6 +53,13 @@
 <script>
 import { getDolarValues } from '../services/apiCall.js'
 import $t from '../assets/text/text.json'
+const enums = [
+  'Dolar turista',
+  'Dolar Soja',
+  'Bitcoin',
+  'Argentina',
+  'Dolar'
+]
 
 export default {
   name: 'TheCalculator',
@@ -62,18 +69,15 @@ export default {
       data: null,
       error: null,
       selectedCurrency: '0',
-      $t: $t
+      $t: $t,
+      enums: enums
     }
   },
   methods: {
-    formatData(data) {
-      return data.filter(d => 
-        d.casa.nombre !== 'Dolar turista'
-        && d.casa.nombre !== 'Dolar Soja'
-        && d.casa.nombre !== 'Bitcoin'
-        && d.casa.nombre !== 'Argentina'
-        && d.casa.nombre !== 'Dolar'
-      )
+    formatData(dataArray) {
+      return dataArray.filter(item => {
+        return !enums.includes(item.casa.nombre);
+      });
     },
     calculateChange(change) {
       if(this.selectedCurrency === "0") {
