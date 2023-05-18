@@ -23,12 +23,12 @@
       <div v-if="data && selectedCurrency === '0'">
         <div v-for="item in data" :key="item.casa.nombre">
           <h3>{{ item.casa.nombre }}: </h3>
-          <span class="green small">${{ input !== "" && input !== 0 ? this.calculateChange(parseFloat(item.casa.venta)) : '0' }}</span>
+          <span class="green small">${{ input !== "" && input !== 0 ? this.calculateArsToUsdChange(parseFloat(item.casa.venta)) : '0' }}</span>
         </div>
       </div>
       <div v-else>
         <h3>{{ $t.es.ars_name_plural }}: </h3>
-        <span class="green small">${{ input !== "" && input !== 0 ? this.calculateChange(selectedCurrency) : '0' }}</span>
+        <span class="green small">${{ input !== "" && input !== 0 ? this.calculateUsdToArsChange() : '0' }}</span>
       </div>
     </section>
     <section class="secondContainer">
@@ -79,13 +79,12 @@ export default {
         return !enums.includes(item.casa.nombre);
       });
     },
-    calculateChange(change) {
-      if(this.selectedCurrency === "0") {
-        return parseFloat(this.input / change).toFixed(2);
-      } else {
-        return (this.input * parseFloat(this.data[change-1].casa.venta)).toFixed(2);
-      }
-    }
+    calculateArsToUsdChange(change) {
+      return parseFloat(this.input / change).toFixed(2);
+    },
+    calculateUsdToArsChange() {
+      return (this.input * parseFloat(this.data[this.selectedCurrency - 1].casa.venta)).toFixed(2);
+    } 
   },
   async mounted() {
     let response = await getDolarValues();
@@ -103,7 +102,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 1em 0;
+  padding: 1em 1.25em;
   height: 60vh;
   width: 80vw;
   th, tr, td {
