@@ -1,5 +1,6 @@
 {
   "es": {
+    "appName": "Calculadora",
     "amount": "monto",
     "currency": "moneda",
     "ars_name": "Peso Argentino",

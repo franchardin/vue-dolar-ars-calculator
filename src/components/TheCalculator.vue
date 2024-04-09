@@ -1,65 +1,64 @@
 <template>
   <main class="calculator">
-    <section class="firstContainer">
-      <h2>{{ $t.es.amount }}</h2>
-      <input
-        type="number"
-        id="input-field"
-        class="input-field"
-        v-model="input"
-        placeholder="0.00"
-        autofocus
-      />
-      <h2>{{ $t.es.currency }}</h2>
-      <select 
-        v-model="selectedCurrency"
-        id="select-field"
-      >
-        <option value="0">{{ $t.es.ars_name }}</option>
-        <option v-for="(item, i) in data" :key="item.casa.nombre" :value="i+1">
-          {{ item.casa.nombre }}
-        </option>
-      </select>
-      <div v-if="data && selectedCurrency === '0'">
-        <div v-for="item in data" :key="item.casa.nombre">
-          <h3>{{ item.casa.nombre }}: </h3>
-          <span class="green small">${{ input !== "" && input !== 0 ? this.calculateArsToUsdChange(parseFloat(item.casa.venta)) : '0' }}</span>
+    <div>
+      <h1>{{ $t.es.appName }}</h1>
+    </div>
+    <div class="flexContainer">
+      <section class="firstContainer">
+        <h2>{{ $t.es.amount }}</h2>
+        <input
+          type="number"
+          id="input-field"
+          class="input-field"
+          v-model="input"
+          placeholder="0.00"
+          autofocus
+        />
+        <h2>{{ $t.es.currency }}</h2>
+        <select 
+          v-model="selectedCurrency"
+          id="select-field"
+        >
+          <option value="0">{{ $t.es.ars_name }}</option>
+          <option v-for="(item, i) in data" :key="item.nombre" :value="i+1">
+            {{ item.nombre }}
+          </option>
+        </select>
+        <div v-if="data && selectedCurrency === '0'">
+          <ul class="leftAlignedList" v-for="item in data" :key="item.nombre">
+            <li class="green small">{{ item.nombre }}: ${{ input !== "" && input !== 0 ? this.calculateArsToUsdChange(parseFloat(item.venta)) : '0' }}
+            </li>
+          </ul>
         </div>
-      </div>
-      <div v-else>
-        <h3>{{ $t.es.ars_name_plural }}: </h3>
-        <span class="green small">${{ input !== "" && input !== 0 ? this.calculateUsdToArsChange() : '0' }}</span>
-      </div>
-    </section>
-    <section class="secondContainer">
-      <h2>{{ $t.es.dolar_values }}</h2>
-      <table v-if="data">
-        <th>{{ $t.es.change_type }}</th>
-        <th>{{ $t.es.change_buy }}</th>
-        <th>{{ $t.es.change_sale }}</th>
-        <tr v-for="item in data" :key="item.casa.nombre">
-          <td>{{ item.casa.nombre.substr(6, item.casa.nombre.length) }}</td>
-          <td class="bigCurrencyNumber light">${{ item.casa.compra }}</td>
-          <td class="bigCurrencyNumber light">${{ item.casa.venta }}</td>
-        </tr>
-      </table>
-      <div v-else>
-        <Loader />
-      </div>
-    </section>
+        <div v-else>
+          <h3>{{ $t.es.ars_name_plural }}: </h3>
+          <span class="green small">${{ input !== "" && input !== 0 ? this.calculateUsdToArsChange() : '0' }}</span>
+        </div>
+      </section>
+      <section class="secondContainer">
+        <h2>{{ $t.es.dolar_values }}</h2>
+        <table v-if="data">
+          <th>{{ $t.es.change_type }}</th>
+          <th>{{ $t.es.change_buy }}</th>
+          <th>{{ $t.es.change_sale }}</th>
+          <tr v-for="item in data" :key="item.casa">
+            <td>{{ item.nombre }}</td>
+            <td class="light">${{ item.compra }}</td>
+            <td class="light">${{ item.venta }}</td>
+          </tr>
+        </table>
+        <div v-else>
+          <img src="/loader.gif" alt="Loading..." />
+        </div>
+      </section>
+    </div>
   </main>
 </template>
 
 <script>
 import { getDolarValues } from '../services/apiCall.js'
 import $t from '../assets/text/text.json'
-const enums = [
-  'Dolar turista',
-  'Dolar Soja',
-  'Bitcoin',
-  'Argentina',
-  'Dolar'
-]
+const enums = []
 
 export default {
   name: 'TheCalculator',
@@ -76,14 +75,15 @@ export default {
   methods: {
     formatData(dataArray) {
       return dataArray.filter(item => {
-        return !enums.includes(item.casa.nombre);
+        return !enums.includes(item.casa);
       });
     },
     calculateArsToUsdChange(change) {
       return parseFloat(this.input / change).toFixed(2);
     },
     calculateUsdToArsChange() {
-      return (this.input * parseFloat(this.data[this.selectedCurrency - 1].casa.venta)).toFixed(2);
+      console.log(this.data[0].compra, this.selectedCurrency)
+      return (this.input * parseFloat(this.data[this.selectedCurrency].venta)).toFixed(2);
     } 
   },
   async mounted() {
@@ -99,20 +99,26 @@ export default {
 .calculator {
   background-color: #e7e7e7;
   border-radius: 3em;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
   padding: 1em;
-  height: 60vh;
   width: 80vw;
-  th, tr, td {
+  th, tr, td, .leftAlignedList {
   text-align: left;
+  }
+  .flexContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+  }
+  .leftAlignedList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
   table {
     border-spacing: 10px;
   }
   h2 {
-    font-size: 2rem;
+    font-size: 1.2rem;
     margin-top: .4em;
     margin-bottom: .2em;
   }
@@ -141,9 +147,6 @@ export default {
     background-color: #138513;
     color: #e7e7e7;
     padding: 1em;
-  }
-  .bigCurrencyNumber {
-    font-size: 2em;
   }
   .light {
     color: #e7e7e7;
