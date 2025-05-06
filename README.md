@@ -1,4 +1,4 @@
-# calculadora
+# Calculadora de pesos argentinos a dólares | USD to ARS calculator
 Deploy: https://starlit-bubblegum-9a2cb7.netlify.app/
 ## Project setup
 ```
